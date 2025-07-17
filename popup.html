@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image to Prompt</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Image to AI Prompt</h1>
+    
+    <div id="drop-area" class="drop-area">
+      <p>Drag & drop image here</p>
+      <p>or</p>
+      <input type="file" id="file-input" accept="image/*">
+      <div id="image-preview" class="image-preview"></div>
+    </div>
+    
+    <button id="generate-btn" class="generate-btn" disabled>Generate Prompt</button>
+    
+    <div id="results" class="results">
+      <h3>Generated Prompt:</h3>
+      <div id="prompt-output" class="prompt-output"></div>
+      <button id="copy-btn" class="copy-btn">Copy Prompt</button>
+      
+      <h3>Alternative Version:</h3>
+      <div id="alt-prompt-output" class="prompt-output"></div>
+      <button id="copy-alt-btn" class="copy-btn">Copy Alternative</button>
+    </div>
+    
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Generating prompts...</p>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
