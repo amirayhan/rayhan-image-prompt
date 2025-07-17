@@ -112,21 +112,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Mock API functions - replace with actual API calls
   async function generatePromptFromImage(image) {
-    // In a real implementation, you would:
-    // 1. Convert image to base64 or send as file
-    // 2. Call your backend or directly to OpenAI/Replicate API
-    // 3. Return the generated prompt
+  // আপনার একটুয়াল API URL দিয়ে প্রতিস্থাপন করুন
+  const API_URL = "https://image-prompt-backend.onrender.com/generate-prompt";
+  
+  const formData = new FormData();
+  formData.append('image', image);
+  
+  try {
+    loading.style.display = 'flex'; // লোডিং স্টেট দেখান
     
-    // Mock response
-    return "A highly detailed digital painting of a futuristic cityscape at sunset, with towering skyscrapers featuring neon lights and holographic advertisements, flying cars zipping between buildings, a cyberpunk aesthetic with a color palette of deep purples, bright pinks, and electric blues, highly detailed textures, 8k resolution, cinematic lighting, concept art style, trending on ArtStation";
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.prompt;
+    
+  } catch (error) {
+    console.error('API Error:', error);
+    return `Error: ${error.message}`;
+  } finally {
+    loading.style.display = 'none'; // লোডিং স্টেট লুকান
   }
+}
+
 
   async function generateAlternativePrompt(basePrompt) {
-    // In a real implementation, you would:
-    // 1. Send the base prompt to an LLM API to rephrase
-    // 2. Return the alternative version
+  // বিকল্প প্রম্পট জেনারেট করার জন্য আলাদা API এন্ডপয়েন্ট থাকলে
+  const ALT_API_URL = "https://image-prompt-backend.onrender.com/generate-alternative";
+  
+  try {
+    const response = await fetch(ALT_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: basePrompt })
+    });
     
-    // Mock response
-    return "Cyberpunk metropolis at dusk: An ultra-detailed 8K render of a futuristic city with glowing neon signs, reflective wet streets, and sleek flying vehicles. The scene features towering megastructures with intricate designs, vibrant purple and teal color grading, atmospheric fog, and dramatic lighting. The style combines hyper-realistic textures with a cinematic sci-fi aesthetic, perfect for concept art or wallpaper.";
+    const data = await response.json();
+    return data.alternativePrompt;
+    
+  } catch (error) {
+    console.error('Alternative prompt error:', error);
+    return "Could not generate alternative version";
   }
+}
 });
+
